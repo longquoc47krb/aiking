@@ -1,0 +1,42 @@
+@import "./mixin.scss";
+.footer {
+  &-container {
+    padding: 1rem 4rem;
+    height: auto;
+  }
+  .copyright {
+    text-align: center;
+    span {
+      font-weight: 700;
+      color: $gray-text;
+    }
+  }
+  hr {
+    margin-bottom: 1rem;
+    border-top-width: 1px;
+    color: $gray-line;
+  }
+  &-grid {
+    @include for-phone {
+      display: none;
+    }
+    display: flex;
+    gap: 0 5rem;
+    ul {
+      list-style: none;
+      padding-inline-start: 0;
+      line-height: 2rem;
+      li {
+        color: $gray-text;
+        font-weight: 300;
+      }
+    }
+  }
+  &-column {
+    display: block;
+    width: (100%/4);
+    span {
+      font-weight: 700;
+    }
+  }
+}

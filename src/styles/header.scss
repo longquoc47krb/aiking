@@ -1,0 +1,13 @@
+.header {
+  &-container {
+    height: 4rem;
+    background-color: white;
+    border-bottom: 1px solid rgba(229, 231, 235, 1);
+    width: 100%;
+    padding: 0 1rem;
+    z-index: 10;
+    img {
+      height: 100%;
+    }
+  }
+}
