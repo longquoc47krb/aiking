@@ -1,13 +1,20 @@
 import { Formik } from "formik";
+import React from "react";
 import { useState } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
-import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
-import { Link } from "react-router-dom";
-import { toast } from "react-toastify";
 import * as Yup from "yup";
+import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import toastPromise from "../../services/toast";
-function LoginForm() {
+import { term } from "../../common/constants";
+import { Link } from "react-router-dom";
+import axios from "axios";
+function RegisterForm() {
   const [passwordType, setPasswordType] = useState("password");
+  const [user, setUser] = useState({
+    username: "",
+    email: "",
+    password: "",
+  });
   const togglePassword = () => {
     if (passwordType === "password") {
       setPasswordType("text");
@@ -20,24 +27,32 @@ function LoginForm() {
     console.log("Captcha value: ", value);
     setIsVerified(true);
   };
+  const submit = (e) => {
+    console.log(user.username);
+    e.preventDefault();
+    const register = {
+      username: user.username,
+      email: user.email,
+      password: user.password,
+    };
+    axios
+      .post("http://localhost:4000/api/signup", register)
+      .then((res) => console.log(res.data))
+      .then((data) => {
+        alert("SignUp SuccessFully");
+      });
+  };
   return (
-    <div className='login'>
-      <div className='login-wrapper'>
-        <div className='login-container'>
+    <div className='signup'>
+      <div className='signup-wrapper'>
+        <div className='signup-container'>
           <Formik
-            initialValues={{ email: "", password: "" }}
+            initialValues={{ username: "", email: "", password: "" }}
             onSubmit={(values, { setSubmitting }) => {
-              toastPromise(
-                setTimeout(() => {
-                  console.log("Logging in", values);
-                  setSubmitting(true);
-                }, 500),
-                "Logging...",
-                "Loggin successfully",
-                "Something went wrong"
-              );
+              setSubmitting(true);
             }}
             validationSchema={Yup.object().shape({
+              username: Yup.string().required("This field is required"),
               email: Yup.string()
                 .email("Your email address is not correct")
                 .required("This field is required"),
@@ -59,9 +74,22 @@ function LoginForm() {
                 handleSubmit,
               } = props;
               return (
-                <form onSubmit={handleSubmit} className='login-form'>
-                  <h1>log in to your account</h1>
+                <form onSubmit={handleSubmit} className='signup-form'>
+                  <h1>Register</h1>
 
+                  <div className='username-container'>
+                    <label htmlFor='username'>Username</label>
+                    <input
+                      name='username'
+                      type='text'
+                      value={values.username}
+                      onChange={handleChange}
+                      className={errors.username && touched.username && "error"}
+                    />
+                    {errors.username && touched.username && (
+                      <div className='input-error'>{errors.username}</div>
+                    )}
+                  </div>
                   <div className='email-container'>
                     <label htmlFor='email'>Email</label>
                     <input
@@ -102,29 +130,31 @@ function LoginForm() {
                   />
                   {values.email &&
                   values.password &&
+                  values.username &&
                   !errors.password &&
                   !errors.email &&
+                  !errors.username &&
                   isVerified ? (
                     <button
                       type='submit'
                       style={{ width: "100%" }}
                       disabled={false}>
-                      Login
+                      Register
                     </button>
                   ) : (
                     <button type='submit' style={{ width: "100%" }} disabled>
-                      Login
+                      Register
                     </button>
                   )}
-                  <a>Forgot your password?</a>
+                  <p className='term'>{term}</p>
                 </form>
               );
             }}
           </Formik>
-          <span className='register'>
-            Don't have an account?{" "}
+          <span className='login'>
+            Already have an account?{" "}
             <a>
-              <Link to='/signup'>Register</Link>
+              <Link to='/login'>Login</Link>
             </a>
           </span>
           <div className='privacy'>
@@ -138,4 +168,4 @@ function LoginForm() {
   );
 }
 
-export default LoginForm;
+export default RegisterForm;

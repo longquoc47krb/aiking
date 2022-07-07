@@ -38,5 +38,16 @@
     span {
       font-weight: 700;
     }
+    a,
+    span:last-child {
+      color: inherit;
+      text-decoration: underline 0.15em rgba(255, 255, 255, 0);
+      transition: text-decoration-color 300ms;
+      cursor: pointer;
+      &:hover,
+      span:hover {
+        text-decoration-color: $primary-color;
+      }
+    }
   }
 }

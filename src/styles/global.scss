@@ -4,6 +4,8 @@
 @import "./login.scss";
 @import "./footer.scss";
 @import "./mixin.scss";
+@import "~react-toastify/dist/ReactToastify.min.css";
+@import "./register.scss";
 * {
   font-family: $primary-font;
 }
@@ -36,4 +38,36 @@ button {
       transform: none;
     }
   }
+}
+.hover-underline-animation {
+  display: inline-block;
+  position: relative;
+  color: inherit;
+}
+
+input {
+  padding: 0.25rem 0.5rem;
+  border: 1px solid rgba(156, 163, 175, 1);
+  height: 1.875rem;
+  outline: none;
+  border-radius: 0.25rem;
+  position: relative;
+  &:focus {
+    border: 2px solid $primary-color;
+  }
+}
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+  display: none;
+}
+input[type="password"]:not(:placeholder-shown) {
+  font-family: "pass";
+  font-size: 1.5rem;
+}
+
+a {
+  text-align: center;
+  text-decoration: underline;
+  color: #70b3f6;
+  cursor: pointer;
 }

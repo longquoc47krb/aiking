@@ -1,5 +1,4 @@
-@import "./mixin.scss";
-.login {
+.signup {
   &-wrapper {
     margin: 2rem 0;
     height: 100%;
@@ -34,7 +33,7 @@
     text-transform: uppercase;
     font-weight: 700;
     font-size: 1.2rem;
-    text-align: center;
+    text-align: left;
     margin-bottom: 1rem;
     @include for-phone {
       font-size: 2rem;
@@ -49,6 +48,12 @@
     font-size: 0.8rem;
   }
 }
+.username-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem 0;
+}
 .email-container {
   width: 100%;
   display: flex;
@@ -62,34 +67,13 @@
   gap: 0.5rem 0;
   position: relative;
 }
-.register {
+.term {
+  font-size: 0.875rem;
+  color: $gray-text;
+}
+.login {
   margin-top: 2rem;
   a {
     text-decoration: none;
   }
-}
-.privacy {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  gap: 0 1rem;
-  margin: 2rem 0;
-  a {
-    font-size: 0.875rem;
-    text-decoration: none;
-    color: $gray-text;
-  }
-  @include for-phone {
-    gap: 0 3rem;
-  }
-}
-.input-error {
-  color: red;
-  font-size: 0.875rem;
-}
-.eye {
-  z-index: 2;
-  position: absolute;
-  right: 5px;
-  top: 2rem;
 }
