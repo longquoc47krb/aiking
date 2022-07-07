@@ -3,7 +3,6 @@ import { useState } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { Link } from "react-router-dom";
-import { toast } from "react-toastify";
 import * as Yup from "yup";
 import toastPromise from "../../services/toast";
 function LoginForm() {
@@ -56,6 +55,7 @@ function LoginForm() {
                 errors,
                 isSubmitting,
                 handleChange,
+                handleBlur,
                 handleSubmit,
               } = props;
               return (
@@ -68,6 +68,7 @@ function LoginForm() {
                       name='email'
                       type='text'
                       value={values.email}
+                      onBlur={handleBlur}
                       onChange={handleChange}
                       className={errors.email && touched.email && "error"}
                     />
@@ -83,6 +84,7 @@ function LoginForm() {
                       type={passwordType}
                       value={values.password}
                       onChange={handleChange}
+                      onBlur={handleBlur}
                       className={errors.password && touched.password && "error"}
                     />
                     <a className='eye' onClick={togglePassword}>
