@@ -40,6 +40,9 @@ function RegisterForm() {
       .then((res) => console.log(res.data))
       .then((data) => {
         alert("SignUp SuccessFully");
+      })
+      .catch(() => {
+        console.log("Errorrrrrrr");
       });
   };
   return (
@@ -52,7 +55,9 @@ function RegisterForm() {
               setSubmitting(true);
             }}
             validationSchema={Yup.object().shape({
-              username: Yup.string().required("This field is required"),
+              username: Yup.string()
+                .required("This field is required")
+                .min(6, "Use from 6 characters"),
               email: Yup.string()
                 .email("Your email address is not correct")
                 .required("This field is required"),
@@ -71,10 +76,11 @@ function RegisterForm() {
                 errors,
                 isSubmitting,
                 handleChange,
+                handleBlur,
                 handleSubmit,
               } = props;
               return (
-                <form onSubmit={handleSubmit} className='signup-form'>
+                <form onSubmit={submit} className='signup-form'>
                   <h1>Register</h1>
 
                   <div className='username-container'>
@@ -84,8 +90,10 @@ function RegisterForm() {
                       type='text'
                       value={values.username}
                       onChange={handleChange}
+                      onBlur={handleBlur}
                       className={errors.username && touched.username && "error"}
                     />
+                    {console.log("errors.username =", errors.username)}
                     {errors.username && touched.username && (
                       <div className='input-error'>{errors.username}</div>
                     )}
@@ -97,6 +105,7 @@ function RegisterForm() {
                       type='text'
                       value={values.email}
                       onChange={handleChange}
+                      onBlur={handleBlur}
                       className={errors.email && touched.email && "error"}
                     />
                     {errors.email && touched.email && (
@@ -111,6 +120,7 @@ function RegisterForm() {
                       type={passwordType}
                       value={values.password}
                       onChange={handleChange}
+                      onBlur={handleBlur}
                       className={errors.password && touched.password && "error"}
                     />
                     <a className='eye' onClick={togglePassword}>
