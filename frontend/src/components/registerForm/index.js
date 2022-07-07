@@ -10,11 +10,6 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 function RegisterForm() {
   const [passwordType, setPasswordType] = useState("password");
-  const [user, setUser] = useState({
-    username: "",
-    email: "",
-    password: "",
-  });
   const togglePassword = () => {
     if (passwordType === "password") {
       setPasswordType("text");
@@ -26,24 +21,6 @@ function RegisterForm() {
   const handleOnChange = (value) => {
     console.log("Captcha value: ", value);
     setIsVerified(true);
-  };
-  const submit = (e) => {
-    console.log(user.username);
-    e.preventDefault();
-    const register = {
-      username: user.username,
-      email: user.email,
-      password: user.password,
-    };
-    axios
-      .post("http://localhost:4000/api/signup", register)
-      .then((res) => console.log(res.data))
-      .then((data) => {
-        alert("SignUp SuccessFully");
-      })
-      .catch(() => {
-        console.log("Errorrrrrrr");
-      });
   };
   return (
     <div className='signup'>
@@ -80,7 +57,7 @@ function RegisterForm() {
                 handleSubmit,
               } = props;
               return (
-                <form onSubmit={submit} className='signup-form'>
+                <form onSubmit={handleSubmit} className='signup-form'>
                   <h1>Register</h1>
 
                   <div className='username-container'>
