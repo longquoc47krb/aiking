@@ -4,8 +4,11 @@ import ReCAPTCHA from "react-google-recaptcha";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import * as Yup from "yup";
-import toastPromise from "../../services/toast";
 function LoginForm() {
+  const [credentials, setCredentials] = useState({
+    email: "",
+    password: "",
+  });
   const [passwordType, setPasswordType] = useState("password");
   const togglePassword = () => {
     if (passwordType === "password") {
@@ -15,28 +18,18 @@ function LoginForm() {
     setPasswordType("password");
   };
   const [isVerified, setIsVerified] = useState(false);
-  const handleOnChange = (value) => {
+  const handleOnChangeCaptcha = (value) => {
     console.log("Captcha value: ", value);
     setIsVerified(true);
   };
-
+  const onSubmit = (e) => {};
   return (
     <div className='login'>
       <div className='login-wrapper'>
         <div className='login-container'>
           <Formik
             initialValues={{ email: "", password: "" }}
-            onSubmit={(values, { setSubmitting }) => {
-              toastPromise(
-                setTimeout(() => {
-                  console.log("Logging in", values);
-                  setSubmitting(true);
-                }, 500),
-                "Logging...",
-                "Loggin successfully",
-                "Something went wrong"
-              );
-            }}
+            onSubmit={onSubmit}
             validationSchema={Yup.object().shape({
               email: Yup.string()
                 .email("Your email address is not correct")
@@ -57,10 +50,9 @@ function LoginForm() {
                 isSubmitting,
                 handleChange,
                 handleBlur,
-                handleSubmit,
               } = props;
               return (
-                <form onSubmit={handleSubmit} className='login-form'>
+                <form onSubmit={onSubmit} className='login-form'>
                   <h1>log in to your account</h1>
                   <div className='email-container'>
                     <label htmlFor='email'>Email</label>
@@ -99,7 +91,7 @@ function LoginForm() {
                   </div>
                   <ReCAPTCHA
                     sitekey={process.env.REACT_APP_SITE_KEY}
-                    onChange={handleOnChange}
+                    onChange={handleOnChangeCaptcha}
                   />
                   {values.email &&
                   values.password &&

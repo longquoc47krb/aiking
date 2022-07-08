@@ -6,8 +6,8 @@ import {
 } from "react-router-dom";
 import Footer from "./components/footer";
 import Header from "./components/header";
-import LoginForm from "./components/loginForm";
-import RegisterForm from "./components/registerForm";
+import LoginForm from "./pages/loginForm";
+import RegisterForm from "./pages/registerForm";
 import "./styles/global.scss";
 function App() {
   return (
