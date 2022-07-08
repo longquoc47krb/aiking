@@ -19,6 +19,7 @@ function LoginForm() {
     console.log("Captcha value: ", value);
     setIsVerified(true);
   };
+
   return (
     <div className='login'>
       <div className='login-wrapper'>
@@ -61,7 +62,6 @@ function LoginForm() {
               return (
                 <form onSubmit={handleSubmit} className='login-form'>
                   <h1>log in to your account</h1>
-
                   <div className='email-container'>
                     <label htmlFor='email'>Email</label>
                     <input
@@ -75,8 +75,7 @@ function LoginForm() {
                     {errors.email && touched.email && (
                       <div className='input-error'>{errors.email}</div>
                     )}
-                  </div>
-
+                  </div>{" "}
                   <div className='password-container'>
                     <label htmlFor='password'>Password</label>
                     <input

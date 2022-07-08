@@ -1,17 +1,17 @@
+import {
+  BrowserRouter as Router,
+  Navigate,
+  Route,
+  Routes,
+} from "react-router-dom";
 import Footer from "./components/footer";
 import Header from "./components/header";
 import LoginForm from "./components/loginForm";
 import RegisterForm from "./components/registerForm";
 import "./styles/global.scss";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate,
-} from "react-router-dom";
 function App() {
   return (
-    <div style={{ backgroundColor: "#f3f4f6" }}>
+    <div style={{ backgroundColor: "#f3f4f6", width: "100%" }}>
       <Header />
       <Router>
         <Routes>
