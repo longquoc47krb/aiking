@@ -1,5 +1,5 @@
 import { Formik } from "formik";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { Link } from "react-router-dom";
@@ -7,6 +7,7 @@ import * as Yup from "yup";
 import toastPromise from "../../services/toast";
 function LoginForm() {
   const [passwordType, setPasswordType] = useState("password");
+  const recaptchaRef = useRef();
   const togglePassword = () => {
     if (passwordType === "password") {
       setPasswordType("text");
@@ -98,6 +99,7 @@ function LoginForm() {
                     )}
                   </div>
                   <ReCAPTCHA
+                    ref={recaptchaRef}
                     sitekey={process.env.REACT_APP_SITE_KEY}
                     onChange={handleOnChange}
                   />
