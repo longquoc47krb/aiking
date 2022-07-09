@@ -1,76 +1,96 @@
-//Import model
-const User = require("../models/User");
-
-//Import jwt cap quyen truy cap
+const User = require("../models/userModel");
+const AppError = require("../utils/AppError");
+const catchAsync = require("../utils/catchAsync");
 const jwt = require("jsonwebtoken");
+const { promisify } = require("util");
 
-//Giai ma
-const bcrypt = require("bcryptjs");
+//create token for authenticated user
+const signToken = (id) => {
+  return jwt.sign({ id }, process.env.JWT_SECRET, {
+    expiresIn: "30d",
+  });
+};
 
-//Ham bat dong bo
-exports.register = async (req, res, next) => {
+const createUserToken = async (user, code, req, res) => {
+  const token = signToken(user._id);
+
+  //set expiry to 1 month
+  let d = new Date();
+  d.setDate(d.getDate() + 30);
+
+  //cookie settings
+  res.cookie("jwt", token, {
+    expires: d,
+    httpOnly: true,
+    secure: req.secure || req.headers["x-forwarded-proto"] === "https",
+    sameSite: "none",
+  });
+
+  //remove user password from output
+  user.password = undefined;
+  res.status(code).json({
+    status: "success",
+    token,
+    data: {
+      user,
+    },
+  });
+};
+
+//create new user
+exports.registerUser = async (req, res, next) => {
+  //pass in request data here to create user from user schema
   try {
-    //Cho tao thanh cong luu vo bien user
-    //rep.body = name, email, password
-    const user = await User.create(req.body);
-
-    //Tao jwt voi data va key
-    const token = jwt.sign({ userId: user._id }, process.env.APP_SECRET);
-
-    res.status(200).json({
-      status: "success",
-      data: { token, userName: user.username, userId: user._id },
+    const newUser = await User.create({
+      username: req.body.username,
+      email: req.body.email,
+      password: req.body.password,
     });
-  } catch (error) {
-    next(error);
+
+    createUserToken(newUser, 201, req, res);
+    //if user can't be created, throw an error
+  } catch (err) {
+    next(err);
   }
 };
 
-exports.login = async (req, res, next) => {
-  try {
-    const user = await User.findOne({ email: req.body.email });
+//log user in
+exports.loginUser = catchAsync(async (req, res, next) => {
+  const { email, password } = req.body;
 
-    if (!user) {
-      //Error: Email is not correct
-      const err = new Error("Email is not correct");
-      err.statusCode = 400;
-      return next(err);
-    }
-
-    //req.body.password do nguoi dung nhap
-    //user.password da duoc hash
-
-    if (bcrypt.compareSync(req.body.password, user.password)) {
-      const token = jwt.sign({ userId: user._id }, process.env.APP_SECRET);
-
-      res.status(200).json({
-        status: "success",
-        data: { token, userName: user.name, userId: user._id },
-      });
-    } else {
-      //Error: Password is not correct
-      const err = new Error("Password is not correct");
-      err.statusCode = 400;
-      return next(err);
-    }
-  } catch (error) {
-    res.json(error);
+  //check if email & password exist
+  if (!email || !password) {
+    return next(new AppError("Please provide a email and password!", 400));
   }
-};
 
-// Get current User
-exports.getCurrentUser = async (req, res, next) => {
-  try {
-    const data = { user: null };
-    if (req.user) {
-      const user = await User.findOne({ _id: req.user.userId });
-      data.user = { userName: user.name, email: user.email, userId: user._id };
-    }
-    res.status(200).json({
-      status: "success",
-      data: data,
-    });
-  } catch (error) {
-    res.json(error);
+  //check if user & password are correct
+  const user = await User.findOne({ email }).select("+password");
+  if (!user || !(await user.correctPassword(password, user.password))) {
+    return next(new AppError("Incorrect email or password", 401));
   }
-};
+
+  createUserToken(user, 200, req, res);
+});
+
+//check if user is logged in
+exports.checkUser = catchAsync(async (req, res, next) => {
+  let currentUser;
+  if (req.cookies.jwt) {
+    const token = req.cookies.jwt;
+    const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
+    currentUser = await User.findById(decoded.id);
+  } else {
+    currentUser = null;
+  }
+
+  res.status(200).send({ currentUser });
+});
+
+//log user out
+exports.logoutUser = catchAsync(async (req, res) => {
+  res.cookie("jwt", "loggedout", {
+    expires: new Date(Date.now() + 1 * 1000),
+    httpOnly: true,
+  });
+  res.status(200).send("User is logged out");
+});
