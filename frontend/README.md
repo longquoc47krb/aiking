@@ -1,4 +1,4 @@
-Welcome to your Remotion project!
+Welcome to my project!
 
 ## Commands
 
