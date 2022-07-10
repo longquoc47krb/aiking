@@ -30,22 +30,19 @@ function RegisterForm(props) {
         password: "",
       },
       validationSchema: validateRegisterForm,
-      onSubmit: (username, email, password) => {
-        axios
-          .post(`${process.env.REACT_APP_BACKEND}/register`, {
-            username: values.username,
-            email: values.email,
-            password: values.password,
-          })
-          .then((response) => {
-            if (!response.data === false) {
-              props.setLoggedInUser(response.data[0]);
-              props.setLoggedIn(true);
-              alert("You have successfully signup!");
-            } else {
-              props.handleNotificationsDanger(response.data);
-            }
+      onSubmit: async (username, email, password) => {
+        try {
+          const res = await axios.post("/auth/register", {
+            username,
+            email,
+            password,
           });
+          localStorage.setItem("access_token", res.data.token);
+          //localStorage.setItem("refresh_token",res.data.tokens.refresh.token)
+          localStorage.setItem("user", JSON.stringify(res.data.user));
+        } catch (error) {
+          console.log("error", error.response);
+        }
       },
     });
   return (
