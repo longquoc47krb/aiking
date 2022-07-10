@@ -1,6 +1,6 @@
 Welcome to my project!
 
-## Commands
+## How to run project
 
 **Install Dependencies**
 
