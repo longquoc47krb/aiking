@@ -22,7 +22,6 @@ function LoginForm() {
     }
     setPasswordType("password");
   };
-
   // captcha verified yet ?
   const [isVerified, setIsVerified] = useState(false);
   const handleOnChangeCaptcha = (value) => {
