@@ -4,6 +4,11 @@ import "./styles/global.scss";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 
+<<<<<<< Updated upstream
+=======
+axios.defaults.baseURL = "http://localhost:5000";
+axios.defaults.headers.post["Content-Type"] = "application/json";
+>>>>>>> Stashed changes
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>

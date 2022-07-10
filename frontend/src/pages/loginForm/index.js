@@ -4,6 +4,10 @@ import { useState } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { Link } from "react-router-dom";
+<<<<<<< Updated upstream
+=======
+import ReCAPTCHA from "react-google-recaptcha";
+>>>>>>> Stashed changes
 import { validateLoginForm } from "../../services/validate";
 function LoginForm({ setLoginUser }) {
   axios.defaults.withCredentials = true;
@@ -17,6 +21,10 @@ function LoginForm({ setLoginUser }) {
     }
     setPasswordType("password");
   };
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
   // captcha verified yet ?
   const [isVerified, setIsVerified] = useState(false);
   const handleOnChangeCaptcha = (value) => {
@@ -32,6 +40,7 @@ function LoginForm({ setLoginUser }) {
         password: "",
       },
       validationSchema: validateLoginForm,
+<<<<<<< Updated upstream
       onSubmit: (email, password) => {
         axios
           .post(`${process.env.REACT_APP_BACKEND}/login`, {
@@ -42,6 +51,20 @@ function LoginForm({ setLoginUser }) {
             alert(res.data.message);
             setLoginUser(res.data.user);
           });
+=======
+      onSubmit: async (email, password) => {
+        try {
+          const res = await axios.post(
+            "/auth/login",
+            { email, password },
+            { credentials: "include" }
+          );
+          localStorage.setItem("access_token", res.data.token);
+          console.log("res", res);
+        } catch (error) {
+          alert("error");
+        }
+>>>>>>> Stashed changes
       },
     });
   return (

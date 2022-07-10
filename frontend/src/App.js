@@ -11,7 +11,11 @@ import RegisterForm from "./pages/registerForm";
 import "./styles/global.scss";
 function App() {
   return (
+<<<<<<< Updated upstream
     <div style={{ backgroundColor: "#f3f4f6", width: "100%" }}>
+=======
+    <div className='background'>
+>>>>>>> Stashed changes
       <Header />
       <Router>
         <Routes>
