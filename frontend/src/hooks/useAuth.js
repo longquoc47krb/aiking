@@ -12,7 +12,7 @@ export default function useAuth() {
   // set user
   const setUserContext = async () => {
     return await axios
-      .get("/user")
+      .get(`${process.env.REACT_APP_BACKEND}/user`)
       .then((res) => {
         setUser(res.data.currentUser);
         navigate.push("/home");
@@ -27,7 +27,7 @@ export default function useAuth() {
     console.log(data);
     const { username, email, password } = data;
     return axios
-      .post("/api/v1/auth/register", {
+      .post(`${process.env.REACT_APP_BACKEND}/auth/register`, {
         username,
         email,
         password,
@@ -44,14 +44,17 @@ export default function useAuth() {
   const loginUser = async (data) => {
     const { email, password } = data;
     return axios
-      .post("/api/v1/auth/login", {
+      .post(`${process.env.REACT_APP_BACKEND}/auth/login`, {
         email,
         password,
       })
       .then(async () => {
         await setUserContext();
+        alert("Login successfully!");
       })
       .catch((err) => {
+        alert(`${process.env.REACT_APP_BACKEND}/auth/login`);
+        alert("Login failed!");
         setError(err.response.data);
       });
   };
@@ -60,10 +63,10 @@ export default function useAuth() {
     try {
       await axios({
         method: "GET",
-        url: `/api/v1/auth/logout`,
+        url: `${process.env.REACT_APP_BACKEND}/auth/logout`,
       }).then((res) => {
         console.log(res);
-        navigate.push("/home");
+        alert("Logout");
       });
     } catch (err) {
       console.log(err);

@@ -90,8 +90,9 @@ function Footer() {
             </ul>
           </div>
         </div>
-        <hr></hr>
+
         <div className='copyright'>
+          <hr></hr>
           <span>Copyright © 2022</span> <strong>Shopcoin.com</strong>
         </div>
       </div>

@@ -1,13 +1,15 @@
 import axios from "axios";
 import { useFormik } from "formik";
-import { useState } from "react";
-import ReCAPTCHA from "react-google-recaptcha";
+import { useEffect, useState } from "react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { Link } from "react-router-dom";
+import useAuth from "../../hooks/useAuth";
+import ReCAPTCHA from "react-google-recaptcha";
 import { validateLoginForm } from "../../services/validate";
 function LoginForm({ setLoginUser }) {
   axios.defaults.withCredentials = true;
-
+  // reload
+  const [reload, setReload] = useState(false);
   // password toggle
   const [passwordType, setPasswordType] = useState("password");
   const togglePassword = () => {
@@ -17,12 +19,22 @@ function LoginForm({ setLoginUser }) {
     }
     setPasswordType("password");
   };
+  // reload captcha
+  useEffect(() => {
+    const refreshCaptcha = () => {
+      setReload(!reload);
+    };
+    refreshCaptcha();
+  }, []);
+
   // captcha verified yet ?
   const [isVerified, setIsVerified] = useState(false);
   const handleOnChangeCaptcha = (value) => {
     console.log("Captcha value: ", value);
     setIsVerified(true);
   };
+
+  const { loginUser, error } = useAuth();
 
   // formik
   const { handleSubmit, handleChange, values, handleBlur, errors, touched } =
@@ -32,25 +44,17 @@ function LoginForm({ setLoginUser }) {
         password: "",
       },
       validationSchema: validateLoginForm,
-      onSubmit: (email, password) => {
-        axios
-          .post(`${process.env.REACT_APP_BACKEND}/login`, {
-            email: values.email,
-            password: values.password,
-          })
-          .then((res) => {
-            alert(res.data.message);
-            setLoginUser(res.data.user);
-          });
+      onSubmit: async (email, password) => {
+        await loginUser(values);
       },
     });
   return (
     <div className='login'>
       <div className='login-wrapper'>
         <div className='login-container'>
-          <form className='login-form' onSubmit={handleSubmit}>
+          <form className='form' onSubmit={handleSubmit}>
             <h1>log in to your account</h1>
-            <div className='email-container'>
+            <div className='input-container'>
               <label htmlFor='email'>Email</label>
               <input
                 name='email'
@@ -60,10 +64,10 @@ function LoginForm({ setLoginUser }) {
                 onBlur={handleBlur}
               />
               {errors.email && touched.email && (
-                <div className='input-error'>{errors.email}</div>
+                <div className='error-message'>{errors.email}</div>
               )}
             </div>{" "}
-            <div className='password-container'>
+            <div className='input-container password'>
               <label htmlFor='password'>Password</label>
               <input
                 name='password'
@@ -73,7 +77,7 @@ function LoginForm({ setLoginUser }) {
                 onBlur={handleBlur}
               />
 
-              <a className='eye' onClick={togglePassword}>
+              <a className='eye-toggle' onClick={togglePassword}>
                 {passwordType === "password" ? (
                   <AiOutlineEyeInvisible style={{ color: "black" }} />
                 ) : (
@@ -81,7 +85,7 @@ function LoginForm({ setLoginUser }) {
                 )}
               </a>
               {errors.password && touched.password && (
-                <div className='input-error'>{errors.password}</div>
+                <div className='error-message'>{errors.password}</div>
               )}
             </div>
             <ReCAPTCHA
@@ -103,7 +107,7 @@ function LoginForm({ setLoginUser }) {
             )}
             <a>Forgot your password?</a>
           </form>
-          <span className='register'>
+          <span className='register-link'>
             Don't have an account?{" "}
             <a>
               <Link to='/signup'>Register</Link>

@@ -10,6 +10,9 @@
       font-weight: 700;
       color: $gray-text;
     }
+    @include for-phone {
+      font-size: 0.875rem;
+    }
   }
   hr {
     margin-bottom: 1rem;

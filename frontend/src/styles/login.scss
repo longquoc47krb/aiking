@@ -10,64 +10,8 @@
     align-items: center;
     flex-direction: column;
   }
-  &-form {
-    background-color: white;
-    position: relative;
-    padding: 2.5rem;
-    border-radius: 0.5rem;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem 0;
-    width: calc(100% / 3.5);
-    // box-shadow: 0 0 7px 0 rgba(156, 163, 175, 0.5);
-    box-shadow: rgba(113, 113, 113, 0.15) -5px -5px 11px,
-      rgba(0, 0, 0, 0.15) 5px 5px 11px;
-    border-bottom: 3px solid #b3b3b3;
-    @include for-phone {
-      width: 90%;
-    }
-    @include for-tablet {
-      width: 60%;
-    }
-  }
-  h1 {
-    text-transform: uppercase;
-    font-weight: 700;
-    font-size: 1.2rem;
-    text-align: center;
-    margin-bottom: 1rem;
-    @include for-phone {
-      font-size: 2rem;
-    }
-    @include for-tablet {
-      font-size: 1.5rem;
-    }
-  }
-  label {
-    font-weight: 400;
-    color: $gray-text;
-    font-size: 0.8rem;
-  }
 }
-.email-container {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem 0;
-}
-.password-container {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem 0;
-  position: relative;
-}
-.register {
-  margin-top: 2rem;
-  a {
-    text-decoration: none;
-  }
-}
+
 .privacy {
   width: 100%;
   display: flex;
@@ -80,16 +24,9 @@
     color: $gray-text;
   }
   @include for-phone {
+    gap: 0 4rem;
+  }
+  @include for-tablet {
     gap: 0 3rem;
   }
-}
-.input-error {
-  color: red;
-  font-size: 0.875rem;
-}
-.eye {
-  z-index: 2;
-  position: absolute;
-  right: 5px;
-  top: 2rem;
 }

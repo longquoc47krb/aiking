@@ -1,7 +1,6 @@
 import axios from "axios";
 import { useFormik } from "formik";
 import { useState } from "react";
-import ReCAPTCHA from "react-google-recaptcha";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import { term } from "../../common/constants";
@@ -51,10 +50,10 @@ function RegisterForm(props) {
     <div className='signup'>
       <div className='signup-wrapper'>
         <div className='signup-container'>
-          <form onSubmit={handleSubmit} className='signup-form'>
+          <form onSubmit={handleSubmit} className='form'>
             <h1>Register</h1>
 
-            <div className='username-container'>
+            <div className='input-container'>
               <label htmlFor='username'>Username</label>
               <input
                 name='username'
@@ -66,10 +65,10 @@ function RegisterForm(props) {
               />
               {console.log("errors.username =", errors.username)}
               {errors.username && touched.username && (
-                <div className='input-error'>{errors.username}</div>
+                <div className='error-message'>{errors.username}</div>
               )}
             </div>
-            <div className='email-container'>
+            <div className='input-container'>
               <label htmlFor='email'>Email</label>
               <input
                 name='email'
@@ -80,11 +79,11 @@ function RegisterForm(props) {
                 className={errors.email && touched.email && "error"}
               />
               {errors.email && touched.email && (
-                <div className='input-error'>{errors.email}</div>
+                <div className='error-message'>{errors.email}</div>
               )}
             </div>
 
-            <div className='password-container'>
+            <div className='input-container password'>
               <label htmlFor='password'>Password</label>
               <input
                 name='password'
@@ -94,7 +93,7 @@ function RegisterForm(props) {
                 onBlur={handleBlur}
                 className={errors.password && touched.password && "error"}
               />
-              <a className='eye' onClick={togglePassword}>
+              <a className='eye-toggle' onClick={togglePassword}>
                 {passwordType === "password" ? (
                   <AiOutlineEyeInvisible style={{ color: "black" }} />
                 ) : (
@@ -102,13 +101,10 @@ function RegisterForm(props) {
                 )}
               </a>
               {errors.password && touched.password && (
-                <div className='input-error'>{errors.password}</div>
+                <div className='error-message'>{errors.password}</div>
               )}
             </div>
-            <ReCAPTCHA
-              sitekey={process.env.REACT_APP_SITE_KEY}
-              onChange={handleOnChangeCaptcha}
-            />
+
             {values.email &&
             values.password &&
             values.username &&
@@ -126,7 +122,7 @@ function RegisterForm(props) {
             )}
             <p className='term'>{term}</p>
           </form>
-          <span className='login'>
+          <span className='login-link'>
             Already have an account?{" "}
             <a>
               <Link to='/login'>Login</Link>
