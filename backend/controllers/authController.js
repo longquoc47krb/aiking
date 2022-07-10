@@ -92,5 +92,5 @@ exports.logoutUser = catchAsync(async (req, res) => {
     expires: new Date(Date.now() + 1 * 1000),
     httpOnly: true,
   });
-  res.status(200).send("User is logged out");
+  res.status(200).send({ message: "User is logged out" });
 });
