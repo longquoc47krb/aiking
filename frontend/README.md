@@ -2,13 +2,13 @@ Welcome to my project!
 
 ## How to run project
 
-**Install Dependencies**
+**Step1. Install Dependencies**
 
 ```console
 npm i
 ```
 
-**Start Preview**
+**Step2. Start Preview**
 
 ```console
 npm start
