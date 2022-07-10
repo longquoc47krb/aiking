@@ -1,16 +1,14 @@
 import axios from "axios";
 import { useFormik } from "formik";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import ReCAPTCHA from "react-google-recaptcha";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { Link } from "react-router-dom";
-import useAuth from "../../hooks/useAuth";
-import ReCAPTCHA from "react-google-recaptcha";
 import { validateLoginForm } from "../../services/validate";
 function LoginForm({ setLoginUser }) {
   axios.defaults.withCredentials = true;
-  // reload
-  const [reload, setReload] = useState(false);
-  // password toggle
+
+  // password eye toggle
   const [passwordType, setPasswordType] = useState("password");
   const togglePassword = () => {
     if (passwordType === "password") {
@@ -19,13 +17,6 @@ function LoginForm({ setLoginUser }) {
     }
     setPasswordType("password");
   };
-  // reload captcha
-  useEffect(() => {
-    const refreshCaptcha = () => {
-      setReload(!reload);
-    };
-    refreshCaptcha();
-  }, []);
 
   // captcha verified yet ?
   const [isVerified, setIsVerified] = useState(false);
@@ -33,8 +24,6 @@ function LoginForm({ setLoginUser }) {
     console.log("Captcha value: ", value);
     setIsVerified(true);
   };
-
-  const { loginUser, error } = useAuth();
 
   // formik
   const { handleSubmit, handleChange, values, handleBlur, errors, touched } =
@@ -45,7 +34,17 @@ function LoginForm({ setLoginUser }) {
       },
       validationSchema: validateLoginForm,
       onSubmit: async (email, password) => {
-        await loginUser(values);
+        try {
+          const res = await axios.post(
+            "/auth/login",
+            { email, password },
+            { credentials: "include" }
+          );
+          localStorage.setItem("access_token", res.data.token);
+          console.log("res", res);
+        } catch (error) {
+          alert("error");
+        }
       },
     });
   return (

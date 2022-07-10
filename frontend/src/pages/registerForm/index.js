@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useFormik } from "formik";
 import { useState } from "react";
+import ReCAPTCHA from "react-google-recaptcha";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import { term } from "../../common/constants";
@@ -104,7 +105,10 @@ function RegisterForm(props) {
                 <div className='error-message'>{errors.password}</div>
               )}
             </div>
-
+            <ReCAPTCHA
+              sitekey={process.env.REACT_APP_SITE_KEY}
+              onChange={handleOnChangeCaptcha}
+            />
             {values.email &&
             values.password &&
             values.username &&
