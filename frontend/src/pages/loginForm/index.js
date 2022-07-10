@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import axios from "axios";
 import { useFormik } from "formik";
 import { useState } from "react";
@@ -5,9 +6,13 @@ import ReCAPTCHA from "react-google-recaptcha";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import { validateLoginForm } from "../../services/validate";
-function LoginForm({ setLoginUser }) {
+function LoginForm() {
   axios.defaults.withCredentials = true;
 
+  //reload page
+  window.setTimeout(function () {
+    window.location.reload();
+  }, 30000);
   // password eye toggle
   const [passwordType, setPasswordType] = useState("password");
   const togglePassword = () => {
@@ -75,7 +80,6 @@ function LoginForm({ setLoginUser }) {
                 onChange={handleChange}
                 onBlur={handleBlur}
               />
-
               <a className='eye-toggle' onClick={togglePassword}>
                 {passwordType === "password" ? (
                   <AiOutlineEyeInvisible style={{ color: "black" }} />
