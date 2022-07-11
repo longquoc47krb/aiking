@@ -56,20 +56,21 @@ exports.registerUser = async (req, res, next) => {
 
 //log user in
 exports.loginUser = catchAsync(async (req, res, next) => {
-  const { email, password } = req.body;
-
-  //check if email & password exist
-  if (!email || !password) {
-    return next(new AppError("Please provide a email and password!", 400));
+  try {
+    const { email, password } = req.body;
+    const user = await User.findOne({ email }).select("+password");
+    //check if email & password exist
+    if (!email || !password) {
+      res.status(400).send({ message: "Please provide a email and password!" });
+    } //check if user & password are correct
+    else if (!user || !(await user.correctPassword(password, user.password))) {
+      res.status(401).send({ message: "Incorrect email or password" });
+    } else {
+      createUserToken(user, 200, req, res);
+    }
+  } catch (error) {
+    next(err);
   }
-
-  //check if user & password are correct
-  const user = await User.findOne({ email }).select("+password");
-  if (!user || !(await user.correctPassword(password, user.password))) {
-    return next(new AppError("Incorrect email or password", 401));
-  }
-
-  createUserToken(user, 200, req, res);
 });
 
 //check if user is logged in

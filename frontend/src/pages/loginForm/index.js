@@ -9,10 +9,6 @@ import { validateLoginForm } from "../../services/validate";
 function LoginForm() {
   axios.defaults.withCredentials = true;
 
-  //reload page
-  window.setTimeout(function () {
-    window.location.reload();
-  }, 30000);
   // password eye toggle
   const [passwordType, setPasswordType] = useState("password");
   const togglePassword = () => {
