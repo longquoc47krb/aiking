@@ -41,6 +41,7 @@ function LoginForm() {
             { credentials: "include" }
           );
           localStorage.setItem("access_token", res.data.token);
+          localStorage.setItem("user", JSON.stringify(res.data.user));
           console.log("res", res);
         } catch (error) {
           alert("error");
@@ -65,7 +66,7 @@ function LoginForm() {
               {errors.email && touched.email && (
                 <div className='error-message'>{errors.email}</div>
               )}
-            </div>{" "}
+            </div>
             <div className='input-container password'>
               <label htmlFor='password'>Password</label>
               <input

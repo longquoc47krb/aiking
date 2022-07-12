@@ -38,7 +38,6 @@ function RegisterForm(props) {
             password,
           });
           localStorage.setItem("access_token", res.data.token);
-          //localStorage.setItem("refresh_token",res.data.tokens.refresh.token)
           localStorage.setItem("user", JSON.stringify(res.data.user));
         } catch (error) {
           console.log("error", error.response);
