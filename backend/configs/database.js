@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { blue } = require("./constants");
 
 //Thuc hien bat dong bo trong qua trinh ket noi DB
 const connectDB = async () => {
@@ -8,7 +9,7 @@ const connectDB = async () => {
       useUnifiedTopology: true,
       useNewUrlParser: true,
     });
-    console.log("Database connected successfully");
+    console.log(blue, `MongoDB Connected: ${conn.connection.host}`);
   } catch (error) {
     console.log(error);
     process.exit(1);

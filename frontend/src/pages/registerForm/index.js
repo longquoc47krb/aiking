@@ -1,13 +1,40 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import axios from "axios";
 import { useFormik } from "formik";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
-import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
 import { term } from "../../common/constants";
 import { validateRegisterForm } from "../../services/validate";
-function RegisterForm(props) {
+import { toast } from "react-toastify";
+import { register, reset } from "../../services/authSlice";
+import Spinner from "../../components/loading";
+
+function RegisterForm() {
+  const [formData, setFormData] = useState({
+    username: "",
+    email: "",
+    password: "",
+  });
+  const { username, email, password } = formData;
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { user, isLoading, error, success, message } = useSelector(
+    (state) => state.auth
+  );
+  useEffect(() => {
+    if (error) {
+      toast.error(message);
+    }
+
+    if (error || user) {
+      navigate("/");
+    }
+
+    dispatch(reset());
+  }, [user, error, success, message, navigate, dispatch]);
   const [passwordType, setPasswordType] = useState("password");
   const togglePassword = () => {
     if (passwordType === "password") {
@@ -29,21 +56,26 @@ function RegisterForm(props) {
         email: "",
         password: "",
       },
+      onChange: (e) => {
+        setFormData((prevState) => ({
+          ...prevState,
+          [e.target.name]: e.target.value,
+        }));
+      },
       validationSchema: validateRegisterForm,
-      onSubmit: async (username, email, password) => {
-        try {
-          const res = await axios.post("/auth/register", {
-            username,
-            email,
-            password,
-          });
-          localStorage.setItem("access_token", res.data.token);
-          localStorage.setItem("user", JSON.stringify(res.data.user));
-        } catch (error) {
-          console.log("error", error.response);
-        }
+      onSubmit: (values) => {
+        const userData = {
+          username: values.username,
+          email: values.email,
+          password: values.password,
+        };
+
+        dispatch(register(userData));
       },
     });
+  if (isLoading) {
+    return <Spinner />;
+  }
   return (
     <div className='signup'>
       <div className='signup-wrapper'>

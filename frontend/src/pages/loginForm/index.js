@@ -1,13 +1,40 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import axios from "axios";
 import { useFormik } from "formik";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import { validateLoginForm } from "../../services/validate";
+import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { login, reset } from "../../services/authSlice";
+import Spinner from "../../components/loading";
 function LoginForm() {
-  axios.defaults.withCredentials = true;
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+  const { email, password } = formData;
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { user, isLoading, error, success, message } = useSelector(
+    (state) => state.auth
+  );
+
+  useEffect(() => {
+    if (error) {
+      toast.error(message);
+    }
+
+    if (success || user) {
+      navigate("/");
+    }
+
+    dispatch(reset());
+  }, [user, error, success, message, navigate, dispatch]);
 
   // password eye toggle
   const [passwordType, setPasswordType] = useState("password");
@@ -32,22 +59,26 @@ function LoginForm() {
         email: "",
         password: "",
       },
+      onChange: (e) => {
+        setFormData((prevState) => ({
+          ...prevState,
+          [e.target.name]: e.target.value,
+        }));
+      },
       validationSchema: validateLoginForm,
-      onSubmit: async (email, password) => {
-        try {
-          const res = await axios.post(
-            "/auth/login",
-            { email, password },
-            { credentials: "include" }
-          );
-          localStorage.setItem("access_token", res.data.token);
-          localStorage.setItem("user", JSON.stringify(res.data.user));
-          console.log("res", res);
-        } catch (error) {
-          alert("error");
-        }
+      onSubmit: (values) => {
+        const userData = {
+          email: values.email,
+          password: values.password,
+        };
+        console.log(userData);
+        dispatch(login(userData));
       },
     });
+  if (isLoading) {
+    return <Spinner />;
+  }
+
   return (
     <div className='login'>
       <div className='login-wrapper'>

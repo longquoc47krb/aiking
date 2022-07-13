@@ -1,97 +1,88 @@
-const User = require("../models/userModel");
-const AppError = require("../utils/AppError");
-const catchAsync = require("../utils/catchAsync");
 const jwt = require("jsonwebtoken");
-const { promisify } = require("util");
+const bcrypt = require("bcryptjs");
+const asyncHandler = require("express-async-handler");
+const User = require("../models/userModel");
 
-//create token for authenticated user
-const signToken = (id) => {
+// @desc    Register new user
+// @route   POST /api/users
+// @access  Public
+const registerUser = asyncHandler(async (req, res) => {
+  const { username, email, password } = req.body;
+
+  if (!username || !email || !password) {
+    res.status(400);
+    throw new Error("Please add all fields");
+  }
+
+  // Check if user exists
+  const userExists = await User.findOne({ email });
+
+  if (userExists) {
+    res.status(400);
+    throw new Error("User already exists");
+  }
+
+  // Hash password
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(password, salt);
+
+  // Create user
+  const user = await User.create({
+    username,
+    email,
+    password: hashedPassword,
+  });
+
+  if (user) {
+    res.status(201).json({
+      _id: user.id,
+      username: user.username,
+      email: user.email,
+      token: generateToken(user._id),
+    });
+  } else {
+    res.status(400);
+    throw new Error("Invalid user data");
+  }
+});
+
+// @desc    Authenticate a user
+// @route   POST /api/users/login
+// @access  Public
+const loginUser = asyncHandler(async (req, res) => {
+  const { email, password } = req.body;
+
+  // Check for user email
+  const user = await User.findOne({ email });
+
+  if (user && (await bcrypt.compare(password, user.password))) {
+    res.json({
+      _id: user.id,
+      username: user.username,
+      email: user.email,
+      token: generateToken(user._id),
+    });
+  } else {
+    res.status(400);
+    throw new Error("Invalid credentials");
+  }
+});
+// @desc    Get user data
+// @route   GET /api/users/me
+// @access  Private
+const getMe = asyncHandler(async (req, res) => {
+  res.status(200).json(req.user);
+});
+
+// Generate JWT
+const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: "30d",
   });
 };
 
-const createUserToken = async (user, code, req, res) => {
-  const token = signToken(user._id);
-
-  //set expiry to 1 month
-  let d = new Date();
-  d.setDate(d.getDate() + 30);
-
-  //cookie settings
-  res.cookie("jwt", token, {
-    expires: d,
-    httpOnly: true,
-    secure: req.secure || req.headers["x-forwarded-proto"] === "https",
-    sameSite: "none",
-  });
-
-  //remove user password from output
-  user.password = undefined;
-  res.status(code).json({
-    status: "success",
-    token,
-    data: {
-      user,
-    },
-  });
+module.exports = {
+  registerUser,
+  loginUser,
+  getMe,
 };
-
-//create new user
-exports.registerUser = async (req, res, next) => {
-  //pass in request data here to create user from user schema
-  try {
-    const newUser = await User.create({
-      username: req.body.username,
-      email: req.body.email,
-      password: req.body.password,
-    });
-
-    createUserToken(newUser, 201, req, res);
-    //if user can't be created, throw an error
-  } catch (err) {
-    next(err);
-  }
-};
-
-//log user in
-exports.loginUser = catchAsync(async (req, res, next) => {
-  try {
-    const { email, password } = req.body;
-    const user = await User.findOne({ email }).select("+password");
-    //check if email & password exist
-    if (!email || !password) {
-      res.status(400).send({ message: "Please provide a email and password!" });
-    } //check if user & password are correct
-    else if (!user || !(await user.correctPassword(password, user.password))) {
-      res.status(401).send({ message: "Incorrect email or password" });
-    } else {
-      createUserToken(user, 200, req, res);
-    }
-  } catch (error) {
-    next(err);
-  }
-});
-
-//check if user is logged in
-exports.checkUser = catchAsync(async (req, res, next) => {
-  let currentUser;
-  if (req.cookies.jwt) {
-    const token = req.cookies.jwt;
-    const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
-    currentUser = await User.findById(decoded.id);
-  } else {
-    currentUser = null;
-  }
-
-  res.status(200).send({ currentUser });
-});
-
-//log user out
-exports.logoutUser = catchAsync(async (req, res) => {
-  res.cookie("jwt", "loggedout", {
-    expires: new Date(Date.now() + 1 * 1000),
-    httpOnly: true,
-  });
-  res.status(200).send({ message: "User is logged out" });
-});
