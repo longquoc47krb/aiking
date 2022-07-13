@@ -67,6 +67,7 @@ const loginUser = asyncHandler(async (req, res) => {
     throw new Error("Invalid credentials");
   }
 });
+
 // @desc    Get user data
 // @route   GET /api/users/me
 // @access  Private

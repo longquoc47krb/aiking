@@ -7,7 +7,8 @@ import { Link } from "react-router-dom";
 import { validateLoginForm } from "../../services/validate";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { login, reset } from "../../services/authSlice";
 import Spinner from "../../components/loading";
 function LoginForm() {
@@ -124,6 +125,7 @@ function LoginForm() {
             )}
             <a>Forgot your password?</a>
           </form>
+          <ToastContainer />
           <span className='register-link'>
             Don't have an account?{" "}
             <a>

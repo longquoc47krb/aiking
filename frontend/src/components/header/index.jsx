@@ -39,13 +39,15 @@ function Header({ isAuthenticated }) {
               </div>
             </li>
           ) : (
-            <button className='login-button'>
-              <Link to='/login'>Login</Link>
-            </button>
+            <>
+              <button className='login-button'>
+                <Link to='/login'>Login</Link>
+              </button>
+              <div className='toggle-menu'>
+                <GiHamburgerMenu onClick={handleClick} />
+              </div>
+            </>
           )}
-          <div className='toggle-menu'>
-            <GiHamburgerMenu onClick={handleClick} />
-          </div>
         </ul>
       </div>
     </div>

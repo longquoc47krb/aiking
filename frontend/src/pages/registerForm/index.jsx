@@ -7,7 +7,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { term } from "../../common/constants";
 import { validateRegisterForm } from "../../services/validate";
-import { toast } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { register, reset } from "../../services/authSlice";
 import Spinner from "../../components/loading";
 
@@ -23,7 +24,15 @@ function RegisterForm() {
     }
 
     if (success || user) {
-      navigate("/login");
+      toast.success("Successfully registered", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
     }
 
     dispatch(reset());
@@ -142,6 +151,7 @@ function RegisterForm() {
             )}
             <p className='term'>{term}</p>
           </form>
+          <ToastContainer />
           <span className='login-link'>
             Already have an account?{" "}
             <a>
