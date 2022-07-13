@@ -1,5 +1,4 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import axios from "axios";
 import { useFormik } from "formik";
 import { useEffect, useState } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
@@ -12,12 +11,6 @@ import { toast } from "react-toastify";
 import { login, reset } from "../../services/authSlice";
 import Spinner from "../../components/loading";
 function LoginForm() {
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
-  const { email, password } = formData;
-
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { user, isLoading, error, success, message } = useSelector(
@@ -58,12 +51,6 @@ function LoginForm() {
       initialValues: {
         email: "",
         password: "",
-      },
-      onChange: (e) => {
-        setFormData((prevState) => ({
-          ...prevState,
-          [e.target.name]: e.target.value,
-        }));
       },
       validationSchema: validateLoginForm,
       onSubmit: (values) => {
