@@ -1,5 +1,4 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import axios from "axios";
 import { useFormik } from "formik";
 import { useEffect, useState } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
@@ -13,12 +12,6 @@ import { register, reset } from "../../services/authSlice";
 import Spinner from "../../components/loading";
 
 function RegisterForm() {
-  const [formData, setFormData] = useState({
-    username: "",
-    email: "",
-    password: "",
-  });
-  const { username, email, password } = formData;
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { user, isLoading, error, success, message } = useSelector(
@@ -29,8 +22,8 @@ function RegisterForm() {
       toast.error(message);
     }
 
-    if (error || user) {
-      navigate("/");
+    if (success || user) {
+      navigate("/login");
     }
 
     dispatch(reset());
@@ -55,12 +48,6 @@ function RegisterForm() {
         username: "",
         email: "",
         password: "",
-      },
-      onChange: (e) => {
-        setFormData((prevState) => ({
-          ...prevState,
-          [e.target.name]: e.target.value,
-        }));
       },
       validationSchema: validateRegisterForm,
       onSubmit: (values) => {
