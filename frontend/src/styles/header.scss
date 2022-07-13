@@ -1,13 +1,59 @@
+@import "./mixin.scss";
 .header {
   &-container {
     height: 4rem;
     background-color: white;
     border-bottom: 1px solid rgba(229, 231, 235, 1);
-    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: auto;
     padding: 0 1rem;
     z-index: 10;
+    position: relative;
+  }
+  &-logo {
+    height: 4rem;
     img {
       height: 100%;
     }
+  }
+  &-auth {
+    list-style: none;
+    @include for-phone {
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      align-items: center;
+      transform: translateX(-101%);
+      transition: transform 0.3s ease;
+      right: 1rem;
+      &.show {
+        transform: translateX(0);
+      }
+    }
+    .username {
+      display: flex;
+    }
+    .logout {
+      margin-left: 0.5rem;
+      &:hover {
+        color: $primary-color;
+        cursor: pointer;
+      }
+    }
+  }
+}
+.toggle-menu {
+  display: none;
+  @include for-phone {
+    display: block;
+    cursor: pointer;
+  }
+}
+.login-button {
+  @include for-phone {
+    display: none;
   }
 }

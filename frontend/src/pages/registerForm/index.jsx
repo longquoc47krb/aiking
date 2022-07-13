@@ -80,7 +80,7 @@ function RegisterForm() {
                 onBlur={handleBlur}
                 className={errors.username && touched.username && "error"}
               />
-              {console.log("errors.username =", errors.username)}
+              {console.log("user:", user)}
               {errors.username && touched.username && (
                 <div className='error-message'>{errors.username}</div>
               )}

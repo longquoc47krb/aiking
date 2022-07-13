@@ -5,6 +5,7 @@
 @import "./footer.scss";
 @import "./mixin.scss";
 @import "./register.scss";
+@import "./home.scss";
 * {
   font-family: $primary-font;
 }
@@ -39,6 +40,10 @@ button {
     &:active {
       transform: none;
     }
+  }
+  a {
+    color: #fff;
+    text-decoration: none;
   }
 }
 .hover-underline-animation {

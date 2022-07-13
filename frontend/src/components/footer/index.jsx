@@ -1,9 +1,16 @@
+import { useLocation } from "react-router-dom";
+
 /* eslint-disable jsx-a11y/anchor-is-valid */
 function Footer() {
+  const location = useLocation();
+  console.log("location:", location.path);
   return (
     <div className='footer'>
       <div className='footer-container'>
-        <div className='footer-grid'>
+        <div
+          className={
+            location.pathname === "/" ? "footer-grid-home" : "footer-grid"
+          }>
           <div className='footer-column'>
             <span>Products</span>
             <ul>

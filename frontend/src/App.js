@@ -13,16 +13,16 @@ import "./styles/global.scss";
 function App() {
   return (
     <div className='background'>
-      <Header />
       <Router>
+        <Header />
         <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/login' element={<LoginForm />} />
           <Route path='/signup' element={<RegisterForm />} />
           <Route path='*' element={<Navigate to='/login' replace />} />
         </Routes>
+        <Footer />
       </Router>
-      <Footer />
     </div>
   );
 }

@@ -13,6 +13,20 @@ var passwordValidator = [
       "Your password must have at least: 1 Lowercase, 1 Uppercase, and Digits",
   }),
 ];
+// User E-mail Validator
+var emailValidator = [
+  validate({
+    validator: "matches",
+    arguments: /^[a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,4}$/,
+    message:
+      "Name must be at least 3 characters, max 40, no special characters or numbers, must have space in between name.",
+  }),
+  validate({
+    validator: "isLength",
+    arguments: [3, 40],
+    message: "Email should be between {ARGS[0]} and {ARGS[1]} characters",
+  }),
+];
 const userSchema = new Schema({
   username: {
     type: String,
@@ -29,12 +43,12 @@ const userSchema = new Schema({
     require: [true, "Enter an email address."],
     unique: [true, "That email address is taken."],
     lowercase: true,
-    validate: [validator.isEmail, "Enter a valid email address."],
+    validate: emailValidator,
   },
   password: {
     type: String,
     required: [true, "Enter a password."],
-    minLength: [6, "Password should be at least four characters"],
+    minLength: [6, "Password should be at least six characters"],
     validate: passwordValidator,
   },
 });
