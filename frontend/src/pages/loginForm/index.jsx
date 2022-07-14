@@ -24,6 +24,18 @@ function LoginForm() {
     }
 
     if (success || user) {
+      setTimeout(
+        toast.success("Successfully logged", {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        }),
+        2000
+      );
       navigate("/");
     }
 
@@ -45,7 +57,6 @@ function LoginForm() {
     console.log("Captcha value: ", value);
     setIsVerified(true);
   };
-
   // formik
   const { handleSubmit, handleChange, values, handleBlur, errors, touched } =
     useFormik({

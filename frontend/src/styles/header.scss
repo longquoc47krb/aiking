@@ -52,4 +52,7 @@
   @include for-phone {
     display: none;
   }
+  &-link {
+    cursor: pointer;
+  }
 }

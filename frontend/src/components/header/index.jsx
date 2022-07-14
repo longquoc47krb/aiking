@@ -7,6 +7,8 @@ import { logout, reset } from "../../services/authSlice";
 import logo from "./../../assets/logo.png";
 import { ImExit } from "react-icons/im";
 import { GiHamburgerMenu } from "react-icons/gi";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 function Header({ isAuthenticated }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -15,6 +17,15 @@ function Header({ isAuthenticated }) {
   const onLogout = () => {
     dispatch(logout());
     dispatch(reset());
+    toast.success("Successfully logout", {
+      position: "top-right",
+      autoClose: 2000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
     navigate("/");
   };
   // useLocation to get route path
@@ -41,9 +52,9 @@ function Header({ isAuthenticated }) {
                 ""
               ) : (
                 <>
-                  <button className='login-button'>
-                    <Link to='/login'>Login</Link>
-                  </button>
+                  <Link to='/login' className='login-button-link'>
+                    <button className='login-button'>Login</button>
+                  </Link>
                   <div className='toggle-menu'>
                     <GiHamburgerMenu />
                   </div>
@@ -53,6 +64,7 @@ function Header({ isAuthenticated }) {
           )}
         </ul>
       </div>
+      <ToastContainer />
     </div>
   );
 }
