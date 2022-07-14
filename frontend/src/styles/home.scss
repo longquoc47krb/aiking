@@ -1,7 +1,58 @@
 .main {
   &-container {
     width: 100%;
-    height: 600px;
+    height: 750px;
+    position: relative;
+    .Typewriter {
+      position: absolute;
+      color: white;
+      font-size: 4rem;
+      top: 50%;
+      left: 40%;
+    }
+    .content-container {
+      position: absolute;
+      top: 40%;
+      right: 10%;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      width: 605px;
+      gap: 1.5rem 0;
+      @include for-phone {
+        align-items: center;
+        p {
+          text-align: center;
+        }
+      }
+      @include for-tablet {
+        left: 20%;
+      }
+      p {
+        font-size: 3rem;
+        margin-block-start: 0;
+        margin-block-end: 0;
+      }
+      .download {
+        background: url("../assets/button.png");
+        background-size: cover;
+        width: 22rem;
+        height: 6rem;
+        &:active {
+          transform: translate(0);
+        }
+      }
+      @include for-tablet {
+        width: 100%;
+        top: 40%;
+        left: 10%;
+      }
+      @include for-phone {
+        width: 100%;
+        top: 40%;
+        left: 0;
+      }
+    }
   }
   img {
     width: 100%;
