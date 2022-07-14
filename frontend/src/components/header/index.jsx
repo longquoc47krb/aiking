@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { logout, reset } from "../../services/authSlice";
 import logo from "./../../assets/logo.png";
 import { ImExit } from "react-icons/im";
@@ -17,11 +17,8 @@ function Header({ isAuthenticated }) {
     dispatch(reset());
     navigate("/");
   };
-
-  const [showNav, setShowNav] = useState(false);
-  const handleClick = () => {
-    setShowNav(!showNav);
-  };
+  // useLocation to get route path
+  const location = useLocation();
   return (
     <div className='header'>
       <div className='header-container'>
@@ -30,7 +27,7 @@ function Header({ isAuthenticated }) {
             <img src={logo} href='/' />
           </Link>
         </div>
-        <ul className={showNav ? "header-auth show" : "header-auth"}>
+        <ul className='header-auth'>
           {user ? (
             <li className='username'>
               <span href=''>Welcome, {user.username}</span>
@@ -40,12 +37,18 @@ function Header({ isAuthenticated }) {
             </li>
           ) : (
             <>
-              <button className='login-button'>
-                <Link to='/login'>Login</Link>
-              </button>
-              <div className='toggle-menu'>
-                <GiHamburgerMenu onClick={handleClick} />
-              </div>
+              {location.pathname == "/login" ? (
+                ""
+              ) : (
+                <>
+                  <button className='login-button'>
+                    <Link to='/login'>Login</Link>
+                  </button>
+                  <div className='toggle-menu'>
+                    <GiHamburgerMenu />
+                  </div>
+                </>
+              )}
             </>
           )}
         </ul>
