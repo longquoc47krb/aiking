@@ -41,7 +41,7 @@ function Header({ isAuthenticated }) {
         <ul className='header-auth'>
           {user ? (
             <li className='username'>
-              <span href=''>Welcome, {user.username}</span>
+              <span href=''>{user.username}</span>
               <div className='logout' onClick={onLogout}>
                 <ImExit />
               </div>
