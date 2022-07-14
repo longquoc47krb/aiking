@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
+/* eslint-disable jsx-a11y/alt-text */
+import React from "react";
 import welcome from "../../assets/banner.jpg";
 
 function Home() {

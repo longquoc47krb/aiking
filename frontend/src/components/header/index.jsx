@@ -1,14 +1,14 @@
 /* eslint-disable jsx-a11y/alt-text */
 
-import React, { useState } from "react";
+import React from "react";
+import { GiHamburgerMenu } from "react-icons/gi";
+import { ImExit } from "react-icons/im";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { logout, reset } from "../../services/authSlice";
 import logo from "./../../assets/logo.png";
-import { ImExit } from "react-icons/im";
-import { GiHamburgerMenu } from "react-icons/gi";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 function Header({ isAuthenticated }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -48,7 +48,7 @@ function Header({ isAuthenticated }) {
             </li>
           ) : (
             <>
-              {location.pathname == "/login" ? (
+              {location.pathname === "/login" ? (
                 ""
               ) : (
                 <>
